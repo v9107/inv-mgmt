@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from inventory.models import Item
 from rest_framework.permissions import IsAuthenticated
 from inventory.serializers import ItemSerializer
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+
 
 @api_view(['GET'])
 def index(request):

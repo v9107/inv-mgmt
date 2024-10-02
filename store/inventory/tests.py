@@ -62,3 +62,15 @@ class ItemCRUDTest(APITestCase):
             format='json',
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+    
+    def test_delete_item(self):
+        item = Item.objects.create(name='tobe deleted item')
+        token = RefreshToken.for_user(self.user).access_token
+        headers = {'Authorization': f'Bearer {token}'}
+
+        res = self.client.delete(
+            reverse("items-detail", kwargs={"pk": item.pk}),
+            headers=headers,
+            format='json',
+        )
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

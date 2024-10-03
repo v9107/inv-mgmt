@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from inventory import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
@@ -37,11 +37,14 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', views.index),
     path('api/login/', TokenObtainPairView.as_view(), name="sigin"),
     path('api/token/refresh/', TokenRefreshView.as_view(), name="token_refresh"),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('api/', views.index),
+    path('api/signup/', views.CreateUserView.as_view(), name="signup"),
+    path('api/users/', views.UsersListView.as_view(), name="users"),
+    re_path(r'^api/user/(?P<pk>\d+)/$', views.UserView.as_view(), name="user_details"),
 ]
 
 urlpatterns += router.urls
